@@ -2,7 +2,6 @@ package rest
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/spacemono/go-api/generated/openapi"
@@ -21,16 +20,27 @@ func NewUserHandlers(userService *service.User) *UserHandlers {
 
 func (h *UserHandlers) GetUsersId(w http.ResponseWriter, r *http.Request, id string) {
 
-	// Add error handling
-	user := h.userService.GetUserById(id)
+	user, err := h.userService.GetUserById(id)
+
+	if err != nil {
+
+		writeError(w, err)
+
+		return
+	}
+
 	json.NewEncoder(w).Encode(user)
 }
 
 func (h *UserHandlers) GetUsers(w http.ResponseWriter, r *http.Request) {
 
-	// Add error handling
-	users := h.userService.GetAll()
+	users, err := h.userService.GetAll()
 
+	if err != nil {
+		writeError(w, err)
+
+		return
+	}
 	json.NewEncoder(w).Encode(users)
 }
 
@@ -42,9 +52,10 @@ func (h *UserHandlers) PostUsers(w http.ResponseWriter, r *http.Request) {
 	result, err := h.userService.Create(cmd)
 
 	if err != nil {
-		fmt.Println("error creating user", err)
-		// Change to new error from Openapi
-		// json.NewEncoder(w).Encode("error creating user")
+
+		writeError(w, err)
+
+		return
 	}
 
 	json.NewEncoder(w).Encode(result)

@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"github.com/spacemono/go-api/entity"
+	"github.com/spacemono/go-api/domain/entity"
 )
 
 type User struct {
