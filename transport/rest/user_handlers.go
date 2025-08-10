@@ -48,7 +48,7 @@ func (h *UserHandlers) PostUsers(w http.ResponseWriter, r *http.Request) {
 	var body openapi.User
 	_ = json.NewDecoder(r.Body).Decode(&body)
 
-	cmd := &command.CreateUser{Username: body.Username, Name: body.Name, Password: body.Password}
+	cmd := &command.CreateUser{Username: body.Username, Email: body.Email, Password: body.Password}
 	result, err := h.userService.Create(cmd)
 
 	if err != nil {

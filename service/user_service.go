@@ -41,11 +41,11 @@ func (s *User) Create(cmd *command.CreateUser) (*command.CreateUserResult, error
 		return nil, NewError(ErrBadRequest, err)
 	}
 
-	user := &entity.User{Name: cmd.Name, Username: cmd.Username, PasswordHash: s.hasher.Hash(cmd.Password)}
+	user := &entity.User{Username: cmd.Username, Email: cmd.Email, PasswordHash: s.hasher.Hash(cmd.Password)}
 
 	if err := s.userRepository.Create(user); err != nil {
 		return nil, NewError(ErrBadRequest, errors.New("failed to create user in memory db"))
 	}
 
-	return &command.CreateUserResult{Username: cmd.Username, Name: cmd.Name, Password: cmd.Password}, nil
+	return &command.CreateUserResult{Username: cmd.Username, Email: cmd.Email, Password: cmd.Password}, nil
 }
